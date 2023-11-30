@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic-Tac-Toe Game</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #14161c; /* Dark background color */
+      color: white;
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-gap: 10px;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1e2328; /* Dark blue cell background */
+      font-size: 2em;
+      cursor: pointer;
+      color: white;
+      border: 2px solid #14161c; /* Dark border color */
+    }
+
+    .cell:hover {
+      background-color: #4fa3d1;
+      color: #14161c;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.5em;
+    }
+
+    #restartButton {
+      background-color: #1e2328; /* Dark blue restart button */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    #restartButton:hover {
+      background-color: #4fa3d1;
+    }
+  </style>
+</head>
+<body>
+  <div id="board"></div>
+  <div id="message"></div>
+  <button id="restartButton" onclick="startGame()">Restart Game</button>
+
+  <script>
+    let board, currentPlayer, isGameOver;
+
+    function startGame() {
+      board = Array.from({ length: 3 }, () => Array(3).fill(''));
+      currentPlayer = 'X';
+      isGameOver = false;
+
+      renderBoard();
+      setMessage('Player X, it\'s your turn.');
+    }
+
+    function renderBoard() {
+      const boardElement = document.getElementById('board');
+      boardElement.innerHTML = '';
+
+      board.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+          const cellElement = document.createElement('div');
+          cellElement.className = 'cell';
+          cellElement.textContent = cell;
+          cellElement.addEventListener('click', () => handleCellClick(rowIndex, colIndex));
+
+          boardElement.appendChild(cellElement);
+        });
+      });
+    }
+
+    function handleCellClick(row, col) {
+      if (isGameOver || board[row][col] !== '') return;
+
+      board[row][col] = currentPlayer;
+      renderBoard();
+
+      if (checkWin()) {
+        isGameOver = true;
+        setMessage(`Player ${currentPlayer} wins!`);
+      } else if (isBoardFull()) {
+        isGameOver = true;
+        setMessage('It\'s a draw!');
+      } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        setMessage(`Player ${currentPlayer}, it\'s your turn.`);
+      }
+    }
+
+    function setMessage(message) {
+      const messageElement = document.getElementById('message');
+      messageElement.textContent = message;
+    }
+
+    function checkWin() {
+      for (let i = 0; i < 3; i++) {
+        if (board[i][0] !== '' && board[i][0] === board[i][1] && board[i][0] === board[i][2]) {
+          return true; // Horizontal win
+        }
+        if (board[0][i] !== '' && board[0][i] === board[1][i] && board[0][i] === board[2][i]) {
+          return true; // Vertical win
+        }
+      }
+
+      if (board[0][0] !== '' && board[0][0] === board[1][1] && board[0][0] === board[2][2]) {
+        return true; // Diagonal win (top-left to bottom-right)
+      }
+
+      if (board[0][2] !== '' && board[0][2] === board[1][1] && board[0][2] === board[2][0]) {
+        return true; // Diagonal win (top-right to bottom-left)
+      }
+
+      return false;
+    }
+
+    function isBoardFull() {
+      return board.every(row => row.every(cell => cell !== ''));
+    }
+
+    startGame(); // Initial game start
+  </script>
+</body>
+</html>
