@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+        h1 {
+            color: darkred;
+        }
+        #quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid darkred;
+            border-radius: 10px;
+            background-color: #663333;
+        }
+        .question {
+            margin-bottom: 15px;
+            text-align: left;
+            color: #fff;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            margin: 5px;
+            padding: 10px;
+            background-color: darkred;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+        .option:hover {
+            background-color: #992222;
+        }
+        #score {
+            margin-top: 20px;
+            font-weight: bold;
+            color: darkred;
+        }
+    </style>
+    <script>
+        // Define quiz questions
+        const questions = [
+            {
+                question: "What is Dove's favorite color?",
+                options: ["Pink", "Green", "Blue", "Red"],
+                correctAnswer: "Blue"
+            },
+            {
+                question: "Which programming language is often used for web development?",
+                options: ["Java", "Python", "JavaScript", "C#"],
+                correctAnswer: "JavaScript"
+            },
+            {
+                question: "How many pets does Dove have?",
+                options: ["1", "2", "3", "4"],
+                correctAnswer: "2"
+            }
+        ];
+
+        // Shuffle function to randomize question order
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Initialize quiz
+        shuffle(questions);
+        let currentQuestion = 0;
+        let score = 0;
+
+        // Function to handle option selection
+        function selectOption(selectedOption) {
+            const correctAnswer = questions[currentQuestion].correctAnswer;
+            if (selectedOption === correctAnswer) {
+                score++;
+            }
+
+            // Move to the next question or display the score
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                displayQuestion();
+            } else {
+                displayScore();
+            }
+        }
+
+        // Function to display a question
+        function displayQuestion() {
+            const questionContainer = document.getElementById('quiz-container');
+            const currentQ = questions[currentQuestion];
+
+            questionContainer.innerHTML = `
+                <div class="question">${currentQ.question}</div>
+                <div class="options">
+                    ${currentQ.options.map(option =>
+                        `<div class="option" onclick="selectOption('${option}')">${option}</div>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Function to display the final score
+        function displayScore() {
+            const questionContainer = document.getElementById('quiz-container');
+            questionContainer.innerHTML = `
+                <div id="score">Your Score: ${score}/${questions.length}</div>
+            `;
+        }
+
+        // Start the quiz
+        window.onload = displayQuestion;
+    </script>
+    <title>Dark Red JS Quiz</title>
+</head>
+<body>
+    <h1>JavaScript Quiz</h1>
+    <div id="quiz-container"></div>
+</body>
+</html>

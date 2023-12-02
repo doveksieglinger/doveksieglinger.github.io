@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Horror Movie Hangman</title>
+    <style>
+        body {
+            font-family: 'Creepster', cursive;
+            text-align: center;
+            background-image: url('bloody_background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        h1 {
+            color: #FF5733;
+            font-size: 36px;
+        }
+
+        #word-display {
+            font-size: 24px;
+            margin: 10px 0;
+            color: white;
+            text-shadow: 2px 2px 2px #000;
+        }
+
+        #letters {
+            font-size: 20px;
+            color: #FF5733;
+        }
+
+        #incorrect-letters {
+            font-size: 18px;
+            color: red;
+        }
+
+        .alphabet-button {
+            margin: 5px;
+            padding: 5px;
+            font-size: 18px;
+            background-color: #FF5733;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .alphabet-button:hover {
+            background-color: #C70039;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Horror Movie Hangman</h1>
+        <div id="word-display"></div>
+        <div id="letters"></div>
+        <div id="incorrect-letters"></div>
+        <button onclick="startGame()">Start New Game</button>
+
+        <div id="alphabet">
+            <!-- Create clickable alphabet buttons -->
+            <div id="alphabet-buttons">
+                <!-- Loop to create buttons for all alphabet letters -->
+                <div id="letter-buttons">
+                    <button class="alphabet-button" onclick="guessLetter('a')">A</button>
+                    <button class="alphabet-button" onclick="guessLetter('b')">B</button>
+                    <button class="alphabet-button" onclick="guessLetter('c')">C</button>
+                    <button class="alphabet-button" onclick="guessLetter('d')">D</button>
+                    <button class="alphabet-button" onclick="guessLetter('e')">E</button>
+                    <button class="alphabet-button" onclick="guessLetter('f')">F</button>
+                    <button class="alphabet-button" onclick="guessLetter('g')">G</button>
+                    <button class="alphabet-button" onclick="guessLetter('h')">H</button>
+                    <button class="alphabet-button" onclick="guessLetter('i')">I</button>
+                    <button class="alphabet-button" onclick="guessLetter('j')">J</button>
+                    <button class="alphabet-button" onclick="guessLetter('k')">K</button>
+                    <button class="alphabet-button" onclick="guessLetter('l')">L</button>
+                    <button class="alphabet-button" onclick="guessLetter('m')">M</button>
+                    <button class="alphabet-button" onclick="guessLetter('n')">N</button>
+                    <button class="alphabet-button" onclick="guessLetter('o')">O</button>
+                    <button class="alphabet-button" onclick="guessLetter('p')">P</button>
+                    <button class="alphabet-button" onclick="guessLetter('q')">Q</button>
+                    <button class="alphabet-button" onclick="guessLetter('r')">R</button>
+                    <button class="alphabet-button" onclick="guessLetter('s')">S</button>
+                    <button class="alphabet-button" onclick="guessLetter('t')">T</button>
+                    <button class="alphabet-button" onclick="guessLetter('u')">U</button>
+                    <button class="alphabet-button" onclick="guessLetter('v')">V</button>
+                    <button class="alphabet-button" onclick="guessLetter('w')">W</button>
+                    <button class="alphabet-button" onclick="guessLetter('x')">X</button>
+                    <button class="alphabet-button" onclick="guessLetter('y')">Y</button>
+                    <button class="alphabet-button" onclick="guessLetter('z')">Z</button>
+                </div>
+                <!-- End of alphabet loop -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            "The Shining",
+            "Psycho",
+            "The Exorcist",
+            "Halloween",
+            "A Nightmare on Elm Street",
+            "The Conjuring",
+            // Add more horror movie titles
+        ];
+
+        let chosenWord;
+        let displayWord = [];
+        let remainingAttempts = 6;
+        let incorrectLetters = [];
+
+        function startGame() {
+            chosenWord = words[Math.floor(Math.random() * words.length)];
+            displayWord = new Array(chosenWord.length).fill('_');
+            remainingAttempts = 6;
+            incorrectLetters = [];
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('word-display').textContent = displayWord.join(' ');
+            document.getElementById('letters').textContent = `Remaining Attempts: ${remainingAttempts}`;
+            document.getElementById('incorrect-letters').textContent = `Incorrect Letters: ${incorrectLetters.join(', ')}`;
+        }
+
+        function guessLetter(letter) {
+            if (chosenWord.toLowerCase().includes(letter.toLowerCase())) {
+                for (let i = 0; i < chosenWord.length; i++) {
+                    if (chosenWord[i].toLowerCase() === letter.toLowerCase()) {
+                        displayWord[i] = chosenWord[i];
+                    }
+                }
+            } else {
+                incorrectLetters.push(letter);
+                remainingAttempts--;
+            }
+
+            updateDisplay();
+
+            if (displayWord.join('') === chosenWord) {
+                alert("You win! The horror movie was: " + chosenWord);
+                startGame();
+            } else if (remainingAttempts === 0) {
+                alert("Game over. The horror movie was: " + chosenWord);
+                startGame();
+            }
+        }
+
+        startGame();  // Start a new game when the page loads
+    </script>
+</body>
+</html>
